@@ -1,0 +1,115 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: ["main", "development"]
+  pull_request:
+    branches: ["main", "development"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # runs-on: tenki-local-ubuntu-22.04-medium-2c-8g  # Uncomment to use custom runner when available
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-outs your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Basic validation step
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Check project structure
+      - name: List project files
+        run: |
+          echo "Project structure:"
+          ls -la
+          echo "Repository information:"
+          git log --oneline -n 5
+
+      # Example steps for different project types (uncomment as needed)
+
+      # For Node.js projects:
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '18'
+      #     cache: 'npm'
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Run tests
+      #   run: npm test
+      #
+      # - name: Run linting
+      #   run: npm run lint
+
+      # For Python projects:
+      # - name: Setup Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.11'
+      #
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt
+      #
+      # - name: Run tests
+      #   run: python -m pytest
+
+      # For Go projects:
+      # - name: Setup Go
+      #   uses: actions/setup-go@v4
+      #   with:
+      #     go-version: '1.21'
+      #
+      # - name: Run tests
+      #   run: go test ./...
+
+      # For Rust projects:
+      # - name: Setup Rust
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
+      #
+      # - name: Run tests
+      #   run: cargo test
+
+      # Generic validation steps
+      - name: Check for common files
+        run: |
+          echo "Checking for common project files..."
+          if [ -f "package.json" ]; then
+            echo "✓ Found package.json - Node.js project detected"
+          fi
+          if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+            echo "✓ Found Python project files"
+          fi
+          if [ -f "go.mod" ]; then
+            echo "✓ Found go.mod - Go project detected"
+          fi
+          if [ -f "Cargo.toml" ]; then
+            echo "✓ Found Cargo.toml - Rust project detected"
+          fi
+          if [ -f "Dockerfile" ]; then
+            echo "✓ Found Dockerfile - Docker project detected"
+          fi
+
+      # Final success message
+      - name: Build and test complete
+        run: |
+          echo "🎉 Build and test workflow completed successfully!"
+          echo "Add specific build and test commands for your project type."
